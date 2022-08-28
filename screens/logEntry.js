@@ -62,7 +62,7 @@ export default function LogEntryScreen() {
                     placeholder='Label' onChange={onLabelChange} />
             </View>
             <View style={styles.actionButtonSection}>
-                <Pressable onPress={e => { }} style={styles.actionButton}>
+                <Pressable disabled={number} onPress={e => { }} style={number ? styles.actionButton : styles.actionButtonDisabled}>
                     <Text style={{ textAlign: 'center' }}>Submit{'\n'}Entry</Text>
                 </Pressable>
             </View>
@@ -118,7 +118,16 @@ const styles = StyleSheet.create({
         borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
         width: Dimensions.get('window').width * 0.6,
         height: Dimensions.get('window').width * 0.6,
+        backgroundColor: 'blue',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    actionButtonDisabled: {
+        borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+        width: Dimensions.get('window').width * 0.6,
+        height: Dimensions.get('window').width * 0.6,
         backgroundColor: '#e0e0e0',
+        color: '#a0a0a0',
         justifyContent: 'center',
         alignItems: 'center'
     },
