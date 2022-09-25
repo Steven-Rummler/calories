@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { View, Text, Pressable, TextInput, StyleSheet, Dimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
+import { store, updateData, addEntry } from '../store';
 
 
-export default function LogEntryScreen() {
+export default function LogEntryScreen({ navigation }) {
+    const dispatch = useDispatch();
     const [entryType, setEntryType] = useState('food');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -12,8 +15,10 @@ export default function LogEntryScreen() {
     const [number, setNumber] = useState(null);
     const [label, setLabel] = useState(null);
 
-    const onEntryTypeChange = (type) => {
-        setEntryType(type);
+    //console.log(store.getState().data.entries);
+
+    const onEntryTypeChange = (event, newType) => {
+        setEntryType(newType);
     }
 
     const onDateChange = (event, newDate) => {
@@ -31,24 +36,30 @@ export default function LogEntryScreen() {
         setShowDatePicker(true);
     };
 
-    const onNumberChange = (e) => {
-        setNumber(e.value);
+    const onNumberChange = (event, newNumber) => {
+        console.log(event.value)
+        setNumber(newNumber);
     }
 
-    const onLabelChange = (e) => {
-        setLabel(e.value);
+    const onLabelChange = (event, newLabel) => {
+        setLabel(newLabel);
+    }
+
+    const submit = (e) => {
+        navigation.navigate('History');
+        dispatch(addEntry({ entryType, data: date.toString(), number, label }))
     }
 
     return (
         <View>
             <View style={styles.toggleButtonSection}>
-                <Pressable style={styles.toggleButton} onPress={() => onEntryTypeChange('food')}>
+                <Pressable style={styles.toggleButton} onPress={e => onEntryTypeChange(e, 'food')}>
                     <Text style={styles.toggleButtonText}>Log{'\n'}Food{'\n'}Calories</Text>
                 </Pressable>
-                <Pressable style={styles.toggleButton} onPress={() => onEntryTypeChange('active')}>
+                <Pressable style={styles.toggleButton} onPress={e => onEntryTypeChange(e, 'active')}>
                     <Text style={styles.toggleButtonText}>Update{'\n'}Active{'\n'}Calories</Text>
                 </Pressable>
-                <Pressable style={styles.toggleButton} onPress={() => onEntryTypeChange('weight')}>
+                <Pressable style={styles.toggleButton} onPress={e => onEntryTypeChange(e, 'weight')}>
                     <Text style={styles.toggleButtonText}>Weigh{'\n'}In</Text>
                 </Pressable>
             </View>
@@ -57,12 +68,12 @@ export default function LogEntryScreen() {
                     <Text style={styles.toggleButtonText}>{Moment(date).format('dddd,MMMM d,h:mm a').replace(/,/g, '\n')}</Text>
                 </Pressable>
                 <TextInput autoFocus keyboardType='numeric' value={number} style={styles.toggleButton}
-                    placeholder={entryTypeUnit[entryType]} onChange={onNumberChange} />
+                    placeholder={entryTypeUnit[entryType]} onChangeText={setNumber} />
                 <TextInput style={styles.toggleButton} value={label}
-                    placeholder='Label' onChange={onLabelChange} />
+                    placeholder='Label' onChangeText={setLabel} />
             </View>
             <View style={styles.actionButtonSection}>
-                <Pressable disabled={number} onPress={e => { }} style={number ? styles.actionButton : styles.actionButtonDisabled}>
+                <Pressable disabled={!number} onPress={submit} style={number ? styles.actionButton : styles.actionButtonDisabled}>
                     <Text style={{ textAlign: 'center' }}>Submit{'\n'}Entry</Text>
                 </Pressable>
             </View>
