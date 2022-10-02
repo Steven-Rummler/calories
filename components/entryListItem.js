@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Alert } from "react-native";
 import { Trash2 } from "react-native-feather";
 import { removeEntry } from "../store";
 import { useDispatch } from "react-redux";

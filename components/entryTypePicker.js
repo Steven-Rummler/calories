@@ -1,4 +1,5 @@
 import { View, Pressable, StyleSheet, Dimensions, Text } from "react-native";
+import { entryTypeLabel, entryTypes } from "../util";
 
 export default function EntryTypePicker(props) {
     const { entryType, setEntryType } = props;
@@ -7,20 +8,17 @@ export default function EntryTypePicker(props) {
         setEntryType(newType);
     }
 
-    const foodButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'food' ? 'lightgreen' : 'lightgray' }
-    const activeButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'active' ? 'lightgreen' : 'lightgray' }
-    const weightButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'weight' ? 'lightgreen' : 'lightgray' }
+    const onButtonStyle = { ...styles.toggleButton, backgroundColor: 'lightgreen' }
+    const offButtonStyle = { ...styles.toggleButton, backgroundColor: 'lightgray' }
 
     return <View style={styles.toggleButtonSection}>
-        <Pressable style={foodButtonStyle} onPress={e => onEntryTypeChange(e, 'food')}>
-            <Text style={styles.toggleButtonText}>Food{'\n'}Calories</Text>
-        </Pressable>
-        <Pressable style={activeButtonStyle} onPress={e => onEntryTypeChange(e, 'active')}>
-            <Text style={styles.toggleButtonText}>Active{'\n'}Calories</Text>
-        </Pressable>
-        <Pressable style={weightButtonStyle} onPress={e => onEntryTypeChange(e, 'weight')}>
-            <Text style={styles.toggleButtonText}>Weight</Text>
-        </Pressable>
+        {entryTypes.map(type =>
+            <Pressable
+                key={type}
+                style={type === entryType ? onButtonStyle : offButtonStyle}
+                onPress={e => onEntryTypeChange(e, type)}>
+                <Text style={styles.toggleButtonText}>{entryTypeLabel(type)}</Text>
+            </Pressable>)}
     </View>
 }
 
