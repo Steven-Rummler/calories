@@ -36,16 +36,8 @@ export default function LogEntryScreen({ navigation }) {
         setShowDatePicker(true);
     };
 
-    const onNumberChange = (event, newNumber) => {
-        console.log(event.value)
-        setNumber(newNumber);
-    }
-
-    const onLabelChange = (event, newLabel) => {
-        setLabel(newLabel);
-    }
-
     const submit = (e) => {
+        navigation.pop();
         navigation.navigate('History');
         dispatch(addEntry({ entryType, data: date.toString(), number, label }))
     }
