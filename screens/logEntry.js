@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Moment from 'moment';
-import { store, updateData, addEntry } from '../store';
-
+import { addEntry } from '../store';
+const dayjs = require('dayjs')
 
 export default function LogEntryScreen({ navigation }) {
     const dispatch = useDispatch();
     const [entryType, setEntryType] = useState('food');
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(dayjs());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [number, setNumber] = useState(null);
     const [label, setLabel] = useState(null);
+
+    const dateFormat = 'dddd,MMMM D';
+    const timeFormat = 'dddd,MMMM D,h:mm a';
 
     const onEntryTypeChange = (event, newType) => {
         setEntryType(newType);
@@ -21,13 +23,13 @@ export default function LogEntryScreen({ navigation }) {
 
     const onDateChange = (event, newDate) => {
         setShowDatePicker(false);
-        if (entryType === 'active') setDate(newDate);
+        if (entryType === 'active') setDate(dayjs(newDate));
         else setShowTimePicker(true);
     }
 
     const onTimeChange = (event, newDate) => {
         setShowTimePicker(false);
-        setDate(newDate);
+        setDate(dayjs(newDate));
     }
 
     const showDatepicker = () => {
@@ -37,7 +39,7 @@ export default function LogEntryScreen({ navigation }) {
     const submit = (e) => {
         navigation.pop();
         navigation.navigate('History');
-        dispatch(addEntry({ entryType, date: date.toString(), number, label }))
+        dispatch(addEntry({ entryType, date: date.format(), number, label }))
     }
 
     const foodButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'food' ? 'lightgreen' : 'lightgray' }
@@ -59,7 +61,7 @@ export default function LogEntryScreen({ navigation }) {
             </View>
             <View style={styles.toggleButtonSection}>
                 <Pressable style={styles.toggleButton} onPress={showDatepicker}>
-                    <Text style={styles.toggleButtonText}>{Moment(date).format(entryType === 'active' ? 'dddd,MMMM d' : 'dddd,MMMM d,h:mm a').replace(/,/g, '\n')}</Text>
+                    <Text style={styles.toggleButtonText}>{date.format(entryType === 'active' ? dateFormat : timeFormat).replace(/,/g, '\n')}</Text>
                 </Pressable>
                 <TextInput autoFocus keyboardType='numeric' value={number} style={styles.toggleButton}
                     placeholder={entryTypeUnit[entryType]} onChangeText={setNumber} />
@@ -73,7 +75,7 @@ export default function LogEntryScreen({ navigation }) {
             </View>
             {showDatePicker && (
                 <DateTimePicker
-                    value={date}
+                    value={date.toDate()}
                     mode='date'
                     onChange={onDateChange}
                 />
