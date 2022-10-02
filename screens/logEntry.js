@@ -15,16 +15,14 @@ export default function LogEntryScreen({ navigation }) {
     const [number, setNumber] = useState(null);
     const [label, setLabel] = useState(null);
 
-    //console.log(store.getState().data.entries);
-
     const onEntryTypeChange = (event, newType) => {
         setEntryType(newType);
     }
 
     const onDateChange = (event, newDate) => {
         setShowDatePicker(false);
-        setShowTimePicker(true);
-        setDate(newDate);
+        if (entryType === 'active') setDate(newDate);
+        else setShowTimePicker(true);
     }
 
     const onTimeChange = (event, newDate) => {
@@ -61,7 +59,7 @@ export default function LogEntryScreen({ navigation }) {
             </View>
             <View style={styles.toggleButtonSection}>
                 <Pressable style={styles.toggleButton} onPress={showDatepicker}>
-                    <Text style={styles.toggleButtonText}>{Moment(date).format('dddd,MMMM d,h:mm a').replace(/,/g, '\n')}</Text>
+                    <Text style={styles.toggleButtonText}>{Moment(date).format(entryType === 'active' ? 'dddd,MMMM d' : 'dddd,MMMM d,h:mm a').replace(/,/g, '\n')}</Text>
                 </Pressable>
                 <TextInput autoFocus keyboardType='numeric' value={number} style={styles.toggleButton}
                     placeholder={entryTypeUnit[entryType]} onChangeText={setNumber} />

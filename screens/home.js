@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
         width: Dimensions.get('window').width * 0.6,
         height: Dimensions.get('window').width * 0.6,
-        backgroundColor: '#e0e0e0',
+        backgroundColor: 'lightblue',
         justifyContent: 'center',
         alignItems: 'center'
     },
