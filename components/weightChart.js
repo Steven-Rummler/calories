@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import { getEntries } from "../store";
-import LineChart from "react-native-chart-kit/dist/line-chart";
-import { Dimensions } from "react-native";
+import { View, Text } from "react-native";
+import { VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
+import dayjs from "dayjs";
 
 export default function WeightChart() {
     const entries = useSelector(getEntries);
@@ -11,43 +11,23 @@ export default function WeightChart() {
 
     console.log(weightEntries)
 
-    return <LineChart
-        data={{
-            datasets: [
-                {
-                    label: 'Measured Weight',
-                    data: weightEntries.map(e => ({
-                        x: new Date(e.date),
-                        y: e.number
-                    }))
-                }
-            ]
-        }}
-        width={Dimensions.get("window").width} // from react-native
-        height={220}
-        //yAxisLabel="$"
-        yAxisSuffix=" lbs"
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={{
-            backgroundColor: "#e26a00",
-            backgroundGradientFrom: "#fb8c00",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 1, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-                borderRadius: 16
-            },
-            propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726"
-            }
-        }}
-        bezier
-        style={{
-            marginVertical: 8,
-            borderRadius: 16
-        }}
-    />
+    const weightData = weightEntries.map(e => ({
+        x: dayjs(e.date).toDate(),
+        y: Number.parseFloat(e.number)
+    }))
+
+    console.log(weightData)
+
+    return <View>{weightEntries.length === 0 ? <Text>No Data</Text> :
+        <VictoryChart theme={VictoryTheme.material}>
+            <VictoryLine
+                style={{
+                    data: { stroke: "#c43a31" },
+                    parent: { border: "1px solid #ccc" }
+                }}
+                data={weightData}
+            />
+        </VictoryChart>
+    }
+    </View >
 }
