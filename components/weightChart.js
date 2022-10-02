@@ -14,7 +14,7 @@ export default function WeightChart() {
     const weightData = weightEntries.map(e => ({
         x: dayjs(e.date).toDate(),
         y: Number.parseFloat(e.number)
-    }))
+    }));
 
     console.log(weightData)
 

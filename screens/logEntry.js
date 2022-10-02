@@ -68,7 +68,7 @@ export default function LogEntryScreen({ navigation }) {
             )}
             {showTimePicker && (
                 <DateTimePicker
-                    value={date}
+                    value={date.toDate()}
                     mode='time'
                     onChange={onTimeChange}
                 />
