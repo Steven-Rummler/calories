@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Text, Pressable, TextInput, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import { store, updateData, addEntry } from '../store';
@@ -42,16 +42,20 @@ export default function LogEntryScreen({ navigation }) {
         dispatch(addEntry({ entryType, data: date.toString(), number, label }))
     }
 
+    const foodButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'food' ? 'lightgreen' : 'lightgray' }
+    const activeButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'active' ? 'lightgreen' : 'lightgray' }
+    const weightButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'weight' ? 'lightgreen' : 'lightgray' }
+
     return (
-        <View>
+        <KeyboardAvoidingView>
             <View style={styles.toggleButtonSection}>
-                <Pressable style={styles.toggleButton} onPress={e => onEntryTypeChange(e, 'food')}>
+                <Pressable style={foodButtonStyle} onPress={e => onEntryTypeChange(e, 'food')}>
                     <Text style={styles.toggleButtonText}>Log{'\n'}Food{'\n'}Calories</Text>
                 </Pressable>
-                <Pressable style={styles.toggleButton} onPress={e => onEntryTypeChange(e, 'active')}>
+                <Pressable style={activeButtonStyle} onPress={e => onEntryTypeChange(e, 'active')}>
                     <Text style={styles.toggleButtonText}>Update{'\n'}Active{'\n'}Calories</Text>
                 </Pressable>
-                <Pressable style={styles.toggleButton} onPress={e => onEntryTypeChange(e, 'weight')}>
+                <Pressable style={weightButtonStyle} onPress={e => onEntryTypeChange(e, 'weight')}>
                     <Text style={styles.toggleButtonText}>Weigh{'\n'}In</Text>
                 </Pressable>
             </View>
@@ -83,7 +87,7 @@ export default function LogEntryScreen({ navigation }) {
                     onChange={onTimeChange}
                 />
             )}
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -103,7 +107,6 @@ const styles = StyleSheet.create({
     toggleButton: {
         height: Dimensions.get('window').height * .15,
         width: Dimensions.get('window').width * .33,
-        //flexGrow: 1,
         textAlign: 'center',
     },
     toggleButtonText: {
@@ -121,7 +124,7 @@ const styles = StyleSheet.create({
         borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
         width: Dimensions.get('window').width * 0.6,
         height: Dimensions.get('window').width * 0.6,
-        backgroundColor: 'blue',
+        backgroundColor: 'lightblue',
         justifyContent: 'center',
         alignItems: 'center'
     },
