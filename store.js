@@ -1,6 +1,7 @@
 import { configureStore, combineReducers, createSlice } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+const _ = require('lodash');
 
 const persistConfig = {
     key: 'root',
@@ -18,11 +19,14 @@ const slice = createSlice({
         },
         addEntry: (state, action) => {
             state.entries.push(action.payload);
+        },
+        removeEntry: (state, action) => {
+            state.entries = state.entries.filter(e => !_.isEqual(e, action.payload));
         }
     },
 });
 
-const { updateData, addEntry } = slice.actions;
+const { updateData, addEntry, removeEntry } = slice.actions;
 
 const getEntries = state => state.data.entries;
 
@@ -43,4 +47,4 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-export { store, persistor, updateData, addEntry, getEntries };
+export { store, persistor, updateData, addEntry, removeEntry, getEntries };
