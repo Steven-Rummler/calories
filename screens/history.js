@@ -1,46 +1,21 @@
-import { View, Text, FlatList, Pressable, Alert } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { getEntries, removeEntry } from '../store';
+import { View, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
+import { getEntries } from '../store';
 import { StatusBar } from 'expo-status-bar';
-import { Delete, Trash, Trash2 } from 'react-native-feather';
+import { useState } from 'react';
+import EntryTypePicker from '../components/entryTypePicker';
+import EntryListItem from '../components/entryListItem';
 
 export default function HistoryScreen({ navigation }) {
-    const dispatch = useDispatch();
     const entries = useSelector(getEntries);
+    const [entryType, setEntryType] = useState('food');
 
-    const onDelete = (entry) => {
-        return Alert.alert(
-            "Delete Entry?",
-            "Entry will be gone forever (a long time)",
-            [
-                {
-                    text: "Delete",
-                    onPress: () => {
-                        dispatch(removeEntry(entry));
-                    },
-                },
-                {
-                    text: "Cancel",
-                },
-            ]
-        );
-    };
-
-    console.log(entries);
-
-    const renderItem = ({ item }) => (
-        <View style={styles.item}>
-            <Text>Date: {item.date}</Text>
-            <Text>Type: {item.entryType}</Text>
-            {item.label ? (<Text>Label: {item.label}</Text>) : null}
-            <Text>Number: {item.number}</Text>
-            <Pressable onPress={e => onDelete(item)}><Trash2 color='black' /></Pressable>
-        </View>
-    );
+    const renderItem = ({ item }) => <EntryListItem item={item} />
 
     return (
         <View style={styles.container}>
-            <FlatList data={entries}
+            <EntryTypePicker entryType={entryType} setEntryType={setEntryType} />
+            <FlatList data={entries.filter(e => e.entryType === entryType)}
                 renderItem={renderItem}
                 keyExtractor={item => item.date + item.entryType + item.label + item.number}
             />

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { addEntry, getEntries } from '../store';
+import EntryTypePicker from '../components/entryTypePicker';
+import { entryTypeUnit } from '../util';
 const dayjs = require('dayjs')
 
 export default function LogEntryScreen({ navigation }) {
@@ -16,10 +18,6 @@ export default function LogEntryScreen({ navigation }) {
     const [label, setLabel] = useState(null);
 
     const dateFormat = entryType === 'active' ? 'dddd, MMMM D' : 'dddd, MMMM D, h:mm a';
-
-    const onEntryTypeChange = (event, newType) => {
-        setEntryType(newType);
-    }
 
     const onDateChange = (event, newDate) => {
         setShowDatePicker(false);
@@ -42,29 +40,15 @@ export default function LogEntryScreen({ navigation }) {
         dispatch(addEntry({ entryType, date: date.format(dateFormat), number, ...(entryType === 'food' && { label }) }))
     }
 
-    const foodButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'food' ? 'lightgreen' : 'lightgray' }
-    const activeButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'active' ? 'lightgreen' : 'lightgray' }
-    const weightButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'weight' ? 'lightgreen' : 'lightgray' }
-
     return (
         <KeyboardAvoidingView>
-            <View style={styles.toggleButtonSection}>
-                <Pressable style={foodButtonStyle} onPress={e => onEntryTypeChange(e, 'food')}>
-                    <Text style={styles.toggleButtonText}>Log{'\n'}Food{'\n'}Calories</Text>
-                </Pressable>
-                <Pressable style={activeButtonStyle} onPress={e => onEntryTypeChange(e, 'active')}>
-                    <Text style={styles.toggleButtonText}>Update{'\n'}Active{'\n'}Calories</Text>
-                </Pressable>
-                <Pressable style={weightButtonStyle} onPress={e => onEntryTypeChange(e, 'weight')}>
-                    <Text style={styles.toggleButtonText}>Weigh{'\n'}In</Text>
-                </Pressable>
-            </View>
+            <EntryTypePicker entryType={entryType} setEntryType={setEntryType} />
             <View style={styles.toggleButtonSection}>
                 <Pressable style={styles.toggleButton} onPress={showDatepicker}>
                     <Text style={styles.toggleButtonText}>{date.format(dateFormat).replace(/,\s/g, '\n')}</Text>
                 </Pressable>
                 <TextInput autoFocus keyboardType='numeric' value={number} style={styles.toggleButton}
-                    placeholder={entryTypeUnit[entryType]} onChangeText={setNumber} />
+                    placeholder={entryTypeUnit(entryType)} onChangeText={setNumber} />
                 {entryType === 'food' ? <TextInput style={styles.toggleButton} value={label}
                     placeholder='Label' onChangeText={setLabel} /> :
                     entryType === 'active' ? <Text style={styles.toggleButton}>Current Active Calories{'\n'}500</Text> :
@@ -91,12 +75,6 @@ export default function LogEntryScreen({ navigation }) {
             )}
         </KeyboardAvoidingView>
     );
-}
-
-const entryTypeUnit = {
-    'food': 'Calories',
-    'active': 'Calories',
-    'weight': 'Pounds'
 }
 
 const styles = StyleSheet.create({
