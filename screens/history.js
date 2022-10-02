@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { View, Text, FlatList, Pressable, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEntries, removeEntry } from '../store';
 import { StatusBar } from 'expo-status-bar';
@@ -8,12 +8,25 @@ export default function HistoryScreen({ navigation }) {
     const dispatch = useDispatch();
     const entries = useSelector(getEntries);
 
-    console.log(entries);
-
     const onDelete = (entry) => {
-        console.log(entry, removeEntry)
-        dispatch(removeEntry(entry));
-    }
+        return Alert.alert(
+            "Delete Entry?",
+            "Entry will be gone forever (a long time)",
+            [
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        dispatch(removeEntry(entry));
+                    },
+                },
+                {
+                    text: "Cancel",
+                },
+            ]
+        );
+    };
+
+    console.log(entries);
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>
