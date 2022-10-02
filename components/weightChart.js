@@ -6,17 +6,11 @@ import dayjs from "dayjs";
 
 export default function WeightChart() {
     const entries = useSelector(getEntries);
-
     const weightEntries = entries.filter(e => e.entryType === 'weight');
-
-    console.log(weightEntries)
-
     const weightData = weightEntries.map(e => ({
         x: dayjs(e.date).toDate(),
         y: Number.parseFloat(e.number)
     }));
-
-    console.log(weightData)
 
     return <View>{weightEntries.length === 0 ? <Text>No Data</Text> :
         <VictoryChart theme={VictoryTheme.material}>
