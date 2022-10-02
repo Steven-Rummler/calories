@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { addEntry } from '../store';
+import { addEntry, getEntries } from '../store';
 const dayjs = require('dayjs')
 
 export default function LogEntryScreen({ navigation }) {
     const dispatch = useDispatch();
+    const entries = useSelector(getEntries);
     const [entryType, setEntryType] = useState('food');
     const [date, setDate] = useState(dayjs());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -14,8 +15,7 @@ export default function LogEntryScreen({ navigation }) {
     const [number, setNumber] = useState(null);
     const [label, setLabel] = useState(null);
 
-    const dateFormat = 'dddd,MMMM D';
-    const timeFormat = 'dddd,MMMM D,h:mm a';
+    const dateFormat = entryType === 'active' ? 'dddd, MMMM D' : 'dddd, MMMM D, h:mm a';
 
     const onEntryTypeChange = (event, newType) => {
         setEntryType(newType);
@@ -39,7 +39,7 @@ export default function LogEntryScreen({ navigation }) {
     const submit = (e) => {
         navigation.pop();
         navigation.navigate('History');
-        dispatch(addEntry({ entryType, date: date.format(), number, label }))
+        dispatch(addEntry({ entryType, date: date.format(dateFormat), number, ...(entryType === 'food' && { label }) }))
     }
 
     const foodButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'food' ? 'lightgreen' : 'lightgray' }
@@ -61,12 +61,14 @@ export default function LogEntryScreen({ navigation }) {
             </View>
             <View style={styles.toggleButtonSection}>
                 <Pressable style={styles.toggleButton} onPress={showDatepicker}>
-                    <Text style={styles.toggleButtonText}>{date.format(entryType === 'active' ? dateFormat : timeFormat).replace(/,/g, '\n')}</Text>
+                    <Text style={styles.toggleButtonText}>{date.format(dateFormat).replace(/,\s/g, '\n')}</Text>
                 </Pressable>
                 <TextInput autoFocus keyboardType='numeric' value={number} style={styles.toggleButton}
                     placeholder={entryTypeUnit[entryType]} onChangeText={setNumber} />
-                <TextInput style={styles.toggleButton} value={label}
-                    placeholder='Label' onChangeText={setLabel} />
+                {entryType === 'food' ? <TextInput style={styles.toggleButton} value={label}
+                    placeholder='Label' onChangeText={setLabel} /> :
+                    entryType === 'active' ? <Text style={styles.toggleButton}>Current Active Calories{'\n'}500</Text> :
+                        <Text style={styles.toggleButton}>Info for Weight?</Text>}
             </View>
             <View style={styles.actionButtonSection}>
                 <Pressable disabled={!number} onPress={submit} style={number ? styles.actionButton : styles.actionButtonDisabled}>

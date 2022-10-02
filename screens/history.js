@@ -6,6 +6,8 @@ import { StatusBar } from 'expo-status-bar';
 export default function HistoryScreen({ navigation }) {
     const entries = useSelector(getEntries);
 
+    console.log(entries);
+
     const renderItem = ({ item }) => (
         <View style={styles.item}>
             <Text>Date: {item.date}</Text>
