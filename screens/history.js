@@ -8,7 +8,7 @@ export default function HistoryScreen({ navigation }) {
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>
-            <Text>Date: {item.data}</Text>
+            <Text>Date: {item.date}</Text>
             <Text>Type: {item.entryType}</Text>
             {item.label ? (<Text>Label: {item.label}</Text>) : null}
             <Text>Number: {item.number}</Text>
@@ -19,7 +19,7 @@ export default function HistoryScreen({ navigation }) {
         <View style={styles.container}>
             <FlatList data={entries}
                 renderItem={renderItem}
-                keyExtractor={item => item.number}
+                keyExtractor={item => item.date + item.entryType + item.label + item.number}
             />
         </View>
     );

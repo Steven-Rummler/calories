@@ -39,7 +39,7 @@ export default function LogEntryScreen({ navigation }) {
     const submit = (e) => {
         navigation.pop();
         navigation.navigate('History');
-        dispatch(addEntry({ entryType, data: date.toString(), number, label }))
+        dispatch(addEntry({ entryType, date: date.toString(), number, label }))
     }
 
     const foodButtonStyle = { ...styles.toggleButton, backgroundColor: entryType === 'food' ? 'lightgreen' : 'lightgray' }
