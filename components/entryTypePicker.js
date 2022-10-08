@@ -26,12 +26,11 @@ const styles = StyleSheet.create({
     toggleButtonSection: {
         height: Dimensions.get('window').height * .15,
         width: Dimensions.get('window').width,
-        display: 'flex',
         flexDirection: 'row'
     },
     toggleButton: {
         height: Dimensions.get('window').height * .15,
-        width: Dimensions.get('window').width * .33,
+        width: Dimensions.get('window').width * .3333,
         textAlign: 'center',
     },
     toggleButtonText: {

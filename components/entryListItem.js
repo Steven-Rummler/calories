@@ -1,8 +1,8 @@
 import { View, Text, Pressable, Alert, Modal, TextInput } from "react-native";
 import { Edit, Trash2 } from "react-native-feather";
-import { removeEntry } from "../store";
+import { addEntry, removeEntry } from "../store";
 import { useDispatch } from "react-redux";
-import { entryTypeUnit } from "../util";
+import { entryTypeUnit, displayDate } from "../util";
 import { useState } from "react";
 import dayjs from "dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -14,11 +14,9 @@ export default function EntryTypePicker(props) {
     const [editVisible, setEditVisible] = useState(false);
     const [editLabel, setEditLabel] = useState(label);
     const [editNumber, setEditNumber] = useState(number);
-    const [editDate, setEditDate] = useState(dayjs(date));
+    const [editDate, setEditDate] = useState(date);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
-
-    const dateFormat = entryType === 'active' ? 'dddd, MMMM D' : 'dddd, MMMM D, h:mm a';
 
     const onDateChange = (event, newDate) => {
         setShowDatePicker(false);
@@ -56,7 +54,7 @@ export default function EntryTypePicker(props) {
     return <View style={styles.item}>
         <View>
             <Text>{label && label + ': '}{number} {entryTypeUnit(entryType)}</Text>
-            <Text>{date}</Text>
+            <Text>{displayDate(date, entryType)}</Text>
         </View>
         <View>
             <Pressable onPress={e => setEditVisible(true)}><Edit color='black' /></Pressable>
@@ -74,7 +72,7 @@ export default function EntryTypePicker(props) {
                     <TextInput autoFocus keyboardType='numeric' value={editNumber} onChangeText={setEditNumber} />
                     <Text>{entryTypeUnit(entryType)}</Text>
                     <Pressable onPress={showDatepicker}>
-                        <Text>{editDate.format(dateFormat)}</Text>
+                        <Text>{displayDate(editDate, entryType)}</Text>
                     </Pressable>
                     <View style={{ flexDirection: 'row' }}>
                         <Pressable
@@ -85,7 +83,11 @@ export default function EntryTypePicker(props) {
                         </Pressable>
                         <Pressable
                             style={[styles.button, { backgroundColor: 'lightblue' }]}
-                            onPress={() => setEditVisible(!editVisible)}
+                            onPress={() => {
+                                dispatch(addEntry({ entryType, date: editDate, number: editNumber, ...(entryType === 'food' && { label: editLabel }) }));
+                                dispatch(removeEntry(item));
+                                setEditVisible(!editVisible);
+                            }}
                         >
                             <Text style={styles.textStyle}>Save Changes</Text>
                         </Pressable>

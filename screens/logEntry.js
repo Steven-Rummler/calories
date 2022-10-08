@@ -4,20 +4,18 @@ import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoid
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { addEntry, getEntries } from '../store';
 import EntryTypePicker from '../components/entryTypePicker';
-import { entryTypeUnit } from '../util';
+import { entryTypeUnit, displayDate } from '../util';
 const dayjs = require('dayjs')
 
 export default function LogEntryScreen({ navigation }) {
     const dispatch = useDispatch();
-    const entries = useSelector(getEntries);
+    const entries = useSelector(getEntries); // eslint-disable-line
     const [entryType, setEntryType] = useState('food');
     const [date, setDate] = useState(dayjs());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [number, setNumber] = useState(null);
     const [label, setLabel] = useState(null);
-
-    const dateFormat = entryType === 'active' ? 'dddd, MMMM D' : 'dddd, MMMM D, h:mm a';
 
     const onDateChange = (event, newDate) => {
         setShowDatePicker(false);
@@ -37,7 +35,7 @@ export default function LogEntryScreen({ navigation }) {
     const submit = (e) => {
         navigation.pop();
         navigation.navigate('History');
-        dispatch(addEntry({ entryType, date: date.format(dateFormat), number, ...(entryType === 'food' && { label }) }))
+        dispatch(addEntry({ entryType, date, number, ...(entryType === 'food' && { label }) }))
     }
 
     return (
@@ -45,7 +43,7 @@ export default function LogEntryScreen({ navigation }) {
             <EntryTypePicker entryType={entryType} setEntryType={setEntryType} />
             <View style={styles.toggleButtonSection}>
                 <Pressable style={styles.toggleButton} onPress={showDatepicker}>
-                    <Text style={styles.toggleButtonText}>{date.format(dateFormat).replace(/,\s/g, '\n')}</Text>
+                    <Text style={styles.toggleButtonText}>{displayDate(date, entryType).replace(/,\s/g, '\n')}</Text>
                 </Pressable>
                 <TextInput autoFocus keyboardType='numeric' value={number} style={styles.toggleButton}
                     placeholder={entryTypeUnit(entryType)} onChangeText={setNumber} />
