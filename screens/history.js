@@ -37,7 +37,7 @@ export default function HistoryScreen({ navigation }) {
                     <ChevronLeft color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
                 </Pressable>
                 <Pressable style={{ width: Dimensions.get('window').width * .7, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>{displayDate(date, entryType)}</Text>
+                    <Text>{displayDate(date, 'active')}</Text>
                 </Pressable>
                 <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={dateUp}>
                     <ChevronRight color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />

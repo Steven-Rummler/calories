@@ -4,7 +4,7 @@ import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoid
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { addEntry, getEntries } from '../store';
 import EntryTypePicker from '../components/entryTypePicker';
-import { entryTypeUnit, displayDate } from '../util';
+import { entryTypeUnit, entryTypeLabel, displayDate } from '../util';
 const dayjs = require('dayjs')
 
 export default function LogEntryScreen({ navigation }) {
@@ -54,7 +54,7 @@ export default function LogEntryScreen({ navigation }) {
             </View>
             <View style={styles.actionButtonSection}>
                 <Pressable disabled={!number} onPress={submit} style={number ? styles.actionButton : styles.actionButtonDisabled}>
-                    <Text style={{ textAlign: 'center' }}>Submit{'\n'}Entry</Text>
+                    <Text style={{ textAlign: 'center' }}>Submit{'\n' + entryTypeLabel(entryType)}</Text>
                 </Pressable>
             </View>
             {showDatePicker && (
