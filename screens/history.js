@@ -12,7 +12,7 @@ import { displayDate } from '../util';
 export default function HistoryScreen({ navigation }) {
     const entries = useSelector(getEntries);
     const [entryType, setEntryType] = useState('food');
-    const [date, setDate] = useState(dayjs());
+    const [date, setDate] = useState(getMaxDate(entries));
 
     const filterEntriesByTypeAndDate = e => {
         const sameType = e.entryType === entryType;
@@ -38,15 +38,15 @@ export default function HistoryScreen({ navigation }) {
 
 function DateSlider({ decrementDate, date, incrementDate }) {
     return <View style={{ flexDirection: 'row', height: Dimensions.get('window').width * .15, width: Dimensions.get('window').width, backgroundColor: 'lightblue' }}>
-        <DateDown {...{ decrementDate }} />
+        <DateArrow Icon={ChevronLeft} action={decrementDate} />
         <DateDisplay {...{ date }} />
-        <DateUp {...{ incrementDate }} />
+        <DateArrow Icon={ChevronRight} action={incrementDate} />
     </View>;
 }
 
-function DateUp({ incrementDate }) {
-    return <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={incrementDate}>
-        <ChevronRight color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
+function DateArrow({ Icon, action }) {
+    return <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={action}>
+        <Icon color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
     </Pressable>;
 }
 
@@ -56,8 +56,7 @@ function DateDisplay({ date }) {
     </Pressable>;
 }
 
-function DateDown({ decrementDate }) {
-    return <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={decrementDate}>
-        <ChevronLeft color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
-    </Pressable>;
-}
+const getEntriesForType = (entries, entryType) => entries.filter(entry => entry.entryType === entryType);
+const getEntriesForDate = (entries, date) => entries.filter(entry => date.isSame(entry.date, 'day'));
+const getMinDate = entries => reduce((min, next) => (!min || next.date.isBefore(min)) ? next.date : min, null) || dayjs();
+const getMaxDate = entries => reduce((max, next) => (!max || next.date.isAfter(max)) ? next.date : max, null) || dayjs();
