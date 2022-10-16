@@ -1,12 +1,40 @@
 const entryTypes = ['food', 'active', 'weight'];
 
-const entryTypeUnit = entryType => entryType === 'weight' ? 'Pounds' : 'Calories';
-
-const entryTypeLabel = entryType => entryType === 'food' ? 'Food\nCalories' : entryType === 'active' ? 'Active\nCalories' : 'Weight';
-
-const displayDate = (date, entryType) => {
-    const dateFormat = entryType === 'active' ? 'dddd, MMMM D' : 'dddd, MMMM D, h:mm a';
-    return date.format(dateFormat);
+const validateEntryType = entryType => {
+    if (!entryTypes.includes(entryType)) throw Error('Invalid Entry Type');
 }
 
-export { entryTypes, entryTypeUnit, entryTypeLabel, displayDate };
+const entryTypeUnits = {
+    food: 'Calories',
+    active: 'Calories',
+    weight: 'Pounds'
+}
+
+const entryTypeUnit = entryType => {
+    validateEntryType(entryType);
+    return entryTypeUnits[entryType];
+}
+
+const entryTypeLabels = {
+    food: 'Food\nCalories',
+    active: 'Active\nCalories',
+    weight: 'Weight'
+}
+
+const entryTypeLabel = entryType => {
+    validateEntryType(entryType);
+    return entryTypeLabels[entryType];
+}
+
+const entryTypeDateFormats = {
+    food: 'dddd, MMMM D, h:mm a',
+    active: 'dddd, MMMM D',
+    weight: 'dddd, MMMM D, h:mm a'
+}
+
+const displayDate = (date, entryType) => {
+    validateEntryType(entryType);
+    return date.format(entryTypeDateFormats[entryType]);
+}
+
+export { entryTypes, entryTypeUnits, entryTypeLabels, entryTypeDateFormats, entryTypeUnit, entryTypeLabel, displayDate };
