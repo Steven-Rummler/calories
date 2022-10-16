@@ -13,56 +13,51 @@ export default function HistoryScreen({ navigation }) {
     const entries = useSelector(getEntries);
     const [entryType, setEntryType] = useState('food');
     const [date, setDate] = useState(dayjs());
-    const list = entries.filter(e => {
+
+    const filterEntriesByTypeAndDate = e => {
         const sameType = e.entryType === entryType;
         const sameDate = e.entryType === 'active' || date.isSame(e.date, 'day');
         return sameDate && sameType;
-    });
+    };
+    const filteredEntries = entries.filter(filterEntriesByTypeAndDate);
 
-    const renderItem = ({ item }) => <EntryListItem item={item} />
-
-    const dateDown = () => {
-        setDate(date.subtract(1, 'day'))
-    }
-
-    const dateUp = () => {
-        setDate(date.add(1, 'day'))
-    }
+    const decrementDate = () => setDate(date.subtract(1, 'day'));
+    const incrementDate = () => setDate(date.add(1, 'day'));
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
             <EntryTypePicker entryType={entryType} setEntryType={setEntryType} />
-            {entryType !== 'active' && <View style={{ flexDirection: 'row', height: Dimensions.get('window').width * .15, width: Dimensions.get('window').width, backgroundColor: 'lightblue' }}>
-                <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={dateDown}>
-                    <ChevronLeft color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
-                </Pressable>
-                <Pressable style={{ width: Dimensions.get('window').width * .7, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>{displayDate(date, 'active')}</Text>
-                </Pressable>
-                <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={dateUp}>
-                    <ChevronRight color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
-                </Pressable>
-            </View>}
-            <FlatList data={list}
-                renderItem={renderItem}
+            {entryType !== 'active' && <DateSlider {...{ decrementDate, date, incrementDate }} />}
+            <FlatList data={filteredEntries}
+                renderItem={({ item }) => <EntryListItem item={item} />}
                 keyExtractor={item => displayDate(item.date, item.entryType) + item.entryType + item.label + item.number}
             />
         </View>
     );
 }
 
-const styles = {
-    container: {
-        flex: 1,
-        marginTop: StatusBar.currentHeight || 0,
-    },
-    item: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-    },
-    title: {
-        fontSize: 32,
-    },
+function DateSlider({ decrementDate, date, incrementDate }) {
+    return <View style={{ flexDirection: 'row', height: Dimensions.get('window').width * .15, width: Dimensions.get('window').width, backgroundColor: 'lightblue' }}>
+        <DateDown {...{ decrementDate }} />
+        <DateDisplay {...{ date }} />
+        <DateUp {...{ incrementDate }} />
+    </View>;
+}
+
+function DateUp({ incrementDate }) {
+    return <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={incrementDate}>
+        <ChevronRight color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
+    </Pressable>;
+}
+
+function DateDisplay({ date }) {
+    return <Pressable style={{ width: Dimensions.get('window').width * .7, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>{displayDate(date, 'active')}</Text>
+    </Pressable>;
+}
+
+function DateDown({ decrementDate }) {
+    return <Pressable style={{ width: Dimensions.get('window').width * .15 }} onPress={decrementDate}>
+        <ChevronLeft color='white' height={Dimensions.get('window').width * .15} width={Dimensions.get('window').width * .15} />
+    </Pressable>;
 }
