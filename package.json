@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --maxWorkers 1"
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.17.3",
@@ -28,7 +28,6 @@
     "react-native-svg": "12.3.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
-    "redux-persist": "^6.0.0",
     "victory-native": "^36.6.8"
   },
   "devDependencies": {
@@ -39,6 +38,9 @@
     "preset": "react-native",
     "setupFiles": [
       "./jestSetup.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|my-project|redux-persist|react-native-linear-gradient|react-native-vector-icons|react-navigation)/)"
     ]
   },
   "private": true
