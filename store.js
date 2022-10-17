@@ -1,10 +1,27 @@
 import { configureStore, combineReducers, createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 const _ = require('lodash');
 
 const slice = createSlice({
     name: 'data',
     initialState: {
-        entries: []
+        entries: [
+            ...Array(15).map(() => ({
+                entryType: 'food',
+                date: dayjs().subtract(10 * 24 * 60 * Math.random(), 'minute'),
+                number: 10 * Math.round(10 + 40 * Math.random)
+            })),
+            ...Array(5).map(() => ({
+                entryType: 'active',
+                date: dayjs().subtract(10 * 24 * 60 * Math.random(), 'minute'),
+                number: 10 * Math.round(100 * Math.random)
+            })),
+            ...Array(5).map(() => ({
+                entryType: 'weight',
+                date: dayjs().subtract(10 * 24 * 60 * Math.random(), 'minute'),
+                number: Math.round(150 + 5 * Math.random, 1)
+            }))
+        ]
     },
     reducers: {
         updateData: (state, action) => {
