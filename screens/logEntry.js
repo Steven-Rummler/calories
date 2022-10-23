@@ -4,7 +4,7 @@ import { View, Text, Pressable, TextInput, StyleSheet, Dimensions, KeyboardAvoid
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { addEntry, getEntries } from '../store';
 import EntryTypePicker from '../components/entryTypePicker';
-import { entryTypeUnit, entryTypeLabel, displayDate } from '../util';
+import { entryTypeUnit, entryTypeLabel, displayDate } from '../pure/entryTypes';
 const dayjs = require('dayjs')
 
 export default function LogEntryScreen({ navigation }) {

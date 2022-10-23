@@ -2,7 +2,7 @@ import { View, Text, Pressable, Alert, Modal, TextInput } from "react-native";
 import { Edit, Trash2 } from "react-native-feather";
 import { addEntry, removeEntry } from "../store";
 import { useDispatch } from "react-redux";
-import { entryTypeUnit, displayDate } from "../util";
+import { entryTypeUnit, displayDate } from "../pure/entryTypes";
 import { useState } from "react";
 import dayjs from "dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';

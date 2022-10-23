@@ -7,20 +7,12 @@ import EntryTypePicker from '../components/entryTypePicker';
 import EntryListItem from '../components/entryListItem';
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'react-native-feather';
-import { displayDate } from '../util';
+import { displayDate } from '../pure/entryTypes';
 
-export default function HistoryScreen({ navigation }) {
+export default function HistoryScreen() {
     const entries = useSelector(getEntries);
-    console.table(entries);
     const [entryType, setEntryType] = useState('food');
-    const [date, setDate] = useState(dayjs()); //getMaxDate(entries));
-
-    // const filterEntriesByTypeAndDate = e => {
-    //     const sameType = e.entryType === entryType;
-    //     const sameDate = e.entryType === 'active' || date.isSame(e.date, 'day');
-    //     return sameDate && sameType;
-    // };
-    //const filteredEntries = entries.filter(filterEntriesByTypeAndDate);
+    const [date, setDate] = useState(dayjs());
 
     const decrementDate = () => setDate(date.subtract(1, 'day'));
     const incrementDate = () => setDate(date.add(1, 'day'));

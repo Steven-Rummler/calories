@@ -1,5 +1,5 @@
 import { View, Pressable, StyleSheet, Dimensions, Text } from "react-native";
-import { entryTypeLabel, entryTypes } from "../util";
+import { entryTypeLabel, entryTypes } from "../pure/entryTypes";
 
 export default function EntryTypePicker(props) {
     const { entryType, setEntryType } = props;

@@ -37,4 +37,4 @@ const displayDate = (date, entryType) => {
     return date.format(entryTypeDateFormats[entryType]);
 }
 
-export { entryTypes, entryTypeUnits, entryTypeLabels, entryTypeDateFormats, entryTypeUnit, entryTypeLabel, displayDate };
+module.exports = { entryTypes, entryTypeUnits, entryTypeLabels, entryTypeDateFormats, entryTypeUnit, entryTypeLabel, displayDate };
