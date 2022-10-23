@@ -6,20 +6,20 @@ const slice = createSlice({
     name: 'data',
     initialState: {
         entries: [
-            ...Array(15).map(() => ({
+            ...[...Array(15)].map(() => ({
                 entryType: 'food',
                 date: dayjs().subtract(10 * 24 * 60 * Math.random(), 'minute'),
-                number: 10 * Math.round(10 + 40 * Math.random)
+                number: 10 * Math.round(10 + 40 * Math.random())
             })),
-            ...Array(5).map(() => ({
+            ...[...Array(5)].map(() => ({
                 entryType: 'active',
                 date: dayjs().subtract(10 * 24 * 60 * Math.random(), 'minute'),
-                number: 10 * Math.round(100 * Math.random)
+                number: 10 * Math.round(100 * Math.random())
             })),
-            ...Array(5).map(() => ({
+            ...[...Array(5)].map(() => ({
                 entryType: 'weight',
                 date: dayjs().subtract(10 * 24 * 60 * Math.random(), 'minute'),
-                number: Math.round(150 + 5 * Math.random, 1)
+                number: Math.round(150 + 5 * Math.random(), 1)
             }))
         ]
     },

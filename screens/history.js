@@ -11,15 +11,16 @@ import { displayDate } from '../util';
 
 export default function HistoryScreen({ navigation }) {
     const entries = useSelector(getEntries);
+    console.table(entries);
     const [entryType, setEntryType] = useState('food');
-    const [date, setDate] = useState(getMaxDate(entries));
+    const [date, setDate] = useState(dayjs()); //getMaxDate(entries));
 
-    const filterEntriesByTypeAndDate = e => {
-        const sameType = e.entryType === entryType;
-        const sameDate = e.entryType === 'active' || date.isSame(e.date, 'day');
-        return sameDate && sameType;
-    };
-    const filteredEntries = entries.filter(filterEntriesByTypeAndDate);
+    // const filterEntriesByTypeAndDate = e => {
+    //     const sameType = e.entryType === entryType;
+    //     const sameDate = e.entryType === 'active' || date.isSame(e.date, 'day');
+    //     return sameDate && sameType;
+    // };
+    //const filteredEntries = entries.filter(filterEntriesByTypeAndDate);
 
     const decrementDate = () => setDate(date.subtract(1, 'day'));
     const incrementDate = () => setDate(date.add(1, 'day'));
@@ -28,9 +29,9 @@ export default function HistoryScreen({ navigation }) {
         <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
             <EntryTypePicker entryType={entryType} setEntryType={setEntryType} />
             {entryType !== 'active' && <DateSlider {...{ decrementDate, date, incrementDate }} />}
-            <FlatList data={filteredEntries}
+            <FlatList data={entries}
                 renderItem={({ item }) => <EntryListItem item={item} />}
-                keyExtractor={item => displayDate(item.date, item.entryType) + item.entryType + item.label + item.number}
+                keyExtractor={item => item.date}
             />
         </View>
     );
@@ -55,8 +56,3 @@ function DateDisplay({ date }) {
         <Text>{displayDate(date, 'active')}</Text>
     </Pressable>;
 }
-
-const getEntriesForType = (entries, entryType) => entries.filter(entry => entry.entryType === entryType);
-const getEntriesForDate = (entries, date) => entries.filter(entry => date.isSame(entry.date, 'day'));
-const getMinDate = entries => entries.reduce((min, next) => (!min || next.date.isBefore(min)) ? next.date : min, null) || dayjs();
-const getMaxDate = entries => entries.reduce((max, next) => (!max || next.date.isAfter(max)) ? next.date : max, null) || dayjs();

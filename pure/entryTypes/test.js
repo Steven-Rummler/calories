@@ -1,4 +1,4 @@
-const { entryTypes, entryTypeUnits, entryTypeLabels, entryTypeDateFormats, entryTypeUnit, entryTypeLabel, displayDate } = require('./util')
+const { entryTypes, entryTypeUnits, entryTypeLabels, entryTypeDateFormats, entryTypeUnit, entryTypeLabel, displayDate } = require('.')
 const dayjs = require('dayjs');
 
 test('entryTypeUnit: invalid entryType error', () => {

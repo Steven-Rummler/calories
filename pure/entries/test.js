@@ -1,4 +1,4 @@
-const { getEntriesForType } = require('./history');
+const { getEntriesForType } = require('.');
 
 test('', () => {
     expect(getEntriesForType([], null)).toThrow();
