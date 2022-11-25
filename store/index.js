@@ -1,5 +1,5 @@
-import { configureStore, combineReducers, createSlice } from "@reduxjs/toolkit";
-import dayjs from "dayjs";
+const { configureStore, combineReducers, createSlice } = require("@reduxjs/toolkit");
+const dayjs = require("dayjs");
 const _ = require('lodash');
 
 const slice = createSlice({
@@ -48,4 +48,4 @@ const store = configureStore({
     reducer
 });
 
-export { store, updateData, addEntry, removeEntry, getEntries };
+module.exports = { store, updateData, addEntry, removeEntry, getEntries };

@@ -14,4 +14,6 @@ const getEntriesForDate = (entries, date) => {
 const getMinDate = entries => entries.reduce((min, next) => (!min || next.date.isBefore(min)) ? next.date : min, null);
 const getMaxDate = entries => entries.reduce((max, next) => (!max || next.date.isAfter(max)) ? next.date : max, null);
 
+
+
 module.exports = { getEntriesForType, getEntriesForDate, getMinDate, getMaxDate };
